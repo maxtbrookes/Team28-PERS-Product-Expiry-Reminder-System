@@ -8,4 +8,8 @@ To setup flask, please install via the command:
 
     pip install flask
 
-if that doesn't work, please install flask and pip on your computer as it must be installed locally to work
+This requires pip and python3 to be installed, if you don't have them follow this link
+
+Python3: https://www.geeksforgeeks.org/python/download-and-install-python-3-latest-version/
+
+Pip: Already installed with python3
