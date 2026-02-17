@@ -1,1 +1,11 @@
-Flask backend location, run python3 main.py to run the file
+Flask backend location, run 
+
+    python3 main.py 
+
+to run the file, need flask installed to run
+
+To setup flask, please install via the command:
+
+    pip install flask
+
+if that doesn't work, please install flask and pip on your computer as it must be installed locally to work
