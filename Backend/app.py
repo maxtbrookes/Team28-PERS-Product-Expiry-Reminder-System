@@ -4,36 +4,45 @@ import os, csv
 app = Flask(__name__)
 
 #Add Product Route
-app.route("/add_product", methods=["POST"])
+@app.route("/add_product", methods=["POST"])
 def add_product():
     return
 
 #Read Products Route
-app.route("/read_products")
+@app.route("/read_products")
 def read_products():
-    return
+    products = read_file()
+    return jsonify(products)
 
 #Delete Product Route
-app.route("/delete_product", methods=["DELETE"])
+@app.route("/delete_product", methods=["DELETE"])
 def delete_product():
-    return
+    products = read_file()
+    return jsonify(products)
 
 #Update Products Route
-app.route("/update_product", methods=["PUT"])
+@app.route("/update_product", methods=["PUT"])
 def update_product():
     return
 
+#
 def read_file():
     products = []
 
-    infile = request.files['products.csv']
-    rtfile = os.fdopen(infile.stream.fileno(), 'rt')
-    csvreader = csv.reader(rtfile)
+    with open("products.csv", "r") as f:
+        reader = csv.reader(f)
 
-    for line in csvreader:
-        entry = line.split(",")
+        for row in reader:
+            product = {
+                "id": row[0],
+                "category": row[1],
+                "name": row[2],
+                "expiry_date": row[3],
+                "added_date": row[4]
+            }
+            products.append(product)
 
-        products.append(entry)
+    return products
 
     
 if __name__ == '__main__':
