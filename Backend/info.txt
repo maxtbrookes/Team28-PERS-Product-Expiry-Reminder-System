@@ -1,6 +1,6 @@
 Flask backend location, run 
 
-    python3 main.py 
+    python3 app.py 
 
 to run the file, need flask installed to run
 

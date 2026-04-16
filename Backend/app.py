@@ -24,12 +24,17 @@ def update_product():
     return
 
 def read_file():
-    
+    products = []
 
     infile = request.files['products.csv']
-    rtfile = os.fdopen(
-        infile.stream.fileno(), 'rt')
+    rtfile = os.fdopen(infile.stream.fileno(), 'rt')
     csvreader = csv.reader(rtfile)
 
+    for line in csvreader:
+        entry = line.split(",")
 
+        products.append(entry)
 
+    
+if __name__ == '__main__':
+    app.run()
