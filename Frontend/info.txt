@@ -1,1 +1,3 @@
 Frontend UI/UX location, open the main.html file to show
+
+Install the Live server extension and change your host to ensure the html file does not get any warnings or errors during CORS
