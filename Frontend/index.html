@@ -1,105 +1,376 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Product Manager</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PERS Product Manager</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f3f4f6;
+            margin:0;
+            padding:20px;
+        }
 
-<div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-    <div style="background:white; padding:20px; margin:100px auto; width:300px;">
+        .main-box{
+            max-width:950px;
+            margin:auto;
+        }
+
+        .top-box{
+            background:#163d6b;
+            color:white;
+            padding:18px;
+            border-radius:12px;
+            margin-bottom:18px;
+        }
+
+        .top-box h1{
+            margin:0;
+        }
+
+        .top-box p{
+            margin:6px 0 0 0;
+        }
+
+        .section{
+            background:white;
+            padding:18px;
+            border-radius:12px;
+            margin-bottom:18px;
+            box-shadow:0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .row{
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+
+        input{
+            padding:10px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            min-width:170px;
+        }
+
+        button{
+            padding:10px 14px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        .blue-btn{
+            background:#163d6b;
+            color:white;
+        }
+
+        .grey-btn{
+            background:#e5e7eb;
+            color:#222;
+        }
+
+        .red-btn{
+            background:#c0392b;
+            color:white;
+        }
+
+        .green-btn{
+            background:#1f8b4c;
+            color:white;
+        }
+
+        #productList{
+            list-style:none;
+            padding:0;
+            margin:0;
+        }
+
+        .product-card{
+            background:#fafafa;
+            border:1px solid #ddd;
+            border-radius:10px;
+            padding:14px;
+            margin-bottom:12px;
+        }
+
+        .product-head{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+
+        .product-name{
+            font-size:18px;
+            font-weight:bold;
+            color:#163d6b;
+        }
+
+        .small-text{
+            color:#555;
+            font-size:14px;
+            margin-top:5px;
+        }
+
+        .opened-tag{
+            background:#e7f7ec;
+            color:#1f8b4c;
+            border:1px solid #b7dec1;
+            padding:5px 9px;
+            border-radius:20px;
+            font-size:12px;
+            font-weight:bold;
+        }
+
+        .closed-tag{
+            background:#eef1f4;
+            color:#555;
+            border:1px solid #d7dde2;
+            padding:5px 9px;
+            border-radius:20px;
+            font-size:12px;
+            font-weight:bold;
+        }
+
+        .btns{
+            margin-top:12px;
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+
+        #noteBox{
+            display:none;
+            background:#fff4d8;
+            border:1px solid #ecd39a;
+            color:#8a5a00;
+            padding:12px;
+            border-radius:10px;
+        }
+
+        #smallMessage{
+            margin-top:10px;
+            font-size:14px;
+            font-weight:bold;
+        }
+
+        #overlay{
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.45);
+        }
+
+        .overlay-inside{
+            background:white;
+            width:320px;
+            margin:90px auto;
+            padding:20px;
+            border-radius:12px;
+        }
+
+        .overlay-inside h3{
+            margin-top:0;
+            color:#163d6b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-box">
+
+    <div class="top-box">
+        <h1>PERS</h1>
+        <p>Oxford Brookes Student Food Assistant</p>
+    </div>
+
+    <div class="section">
+        <h2>Add Product</h2>
+        <div class="row">
+            <input id="category" placeholder="Category">
+            <input id="name" placeholder="Name">
+            <input id="expiry_date" placeholder="Expiry Date DD/MM/YYYY">
+            <button class="blue-btn" onclick="addProduct()">Add Product</button>
+        </div>
+        <div id="smallMessage"></div>
+    </div>
+
+    <div class="section">
+        <h2>Notification</h2>
+        <div id="noteBox"></div>
+    </div>
+
+    <div class="section">
+        <h2>Products</h2>
+        <ul id="productList"></ul>
+    </div>
+
+</div>
+
+<div id="overlay">
+    <div class="overlay-inside">
         <h3>Update Product</h3>
 
-        <span>Name:</span>
+        <span>Name:</span><br>
         <input id="editName" placeholder="Name"><br><br>
-        <span>Category:</span>
+
+        <span>Category:</span><br>
         <input id="editCategory" placeholder="Category"><br><br>
-        <span>Expiry Date:</span>
+
+        <span>Expiry Date:</span><br>
         <input id="editExpiry" placeholder="Expiry Date"><br><br>
 
-        <button onclick="updateProduct()">Update</button>
-        <button onclick="closeOverlay()">Cancel</button>
+        <button class="blue-btn" onclick="updateProduct()">Update</button>
+        <button class="grey-btn" onclick="closeOverlay()">Cancel</button>
     </div>
 </div>
 
-<body>
-
-    <h1>Product Manager</h1>
-
-    <!-- Add Product -->
-    <h2>Add Product</h2>
-    <input id="category" placeholder="Category">
-    <input id="name" placeholder="Name">
-    <input id="expiry_date" placeholder="Expiry Date">
-    <button onclick="addProduct()">Add</button>
-
-    <!-- Products -->
-    <h2>Products</h2>
-    <ul id="productList"></ul>
-
 <script>
-    let currentProductId = null;
+    let currentId = null;
     const BASE_URL = "http://127.0.0.1:5000";
 
-    // Load products
-    async function loadProducts() {
-        try {
+    // bunu local storage da tutuyorum cunku backendde opened yok su an
+    function getOpenedStuff(){
+        const data = localStorage.getItem("openedStuff");
+        if(data){
+            return JSON.parse(data);
+        }
+        return {};
+    }
+
+    function saveOpenedStuff(data){
+        localStorage.setItem("openedStuff", JSON.stringify(data));
+    }
+
+    // ustte bir yerde mesaj gibi gozuksun diye
+    function showMsg(text){
+        const box = document.getElementById("noteBox");
+        box.style.display = "block";
+        box.textContent = text;
+    }
+
+    // urunleri backendden cekip listeye koyuyorum
+    async function loadProducts(){
+        try{
             const res = await fetch(`${BASE_URL}/read_products`);
             const data = await res.json();
 
             const list = document.getElementById("productList");
             list.innerHTML = "";
 
-            data.forEach(p => {
+            const openedData = getOpenedStuff();
+
+            data.forEach(function(p){
+                let openNow = false;
+
+                if(openedData[p.id] === true){
+                    openNow = true;
+                }
+
                 const li = document.createElement("li");
-                const span = document.createElement("span");
-                const delButton = document.createElement("button");
-                const updateButton = document.createElement("button");
-                span.textContent = `Product Id: ${p.id} - Name: ${p.name} - Category: ${p.category} - Expiry Date: ${p.expiry_date} - Date Added: ${p.added_date}  `;
-                delButton.textContent = "Delete";
-                updateButton.textContent = "Update";
-                delButton.onclick = () => deleteProduct(p.id);
-                updateButton.onclick = () => openOverlay(p);
-                li.appendChild(span);
-                span.appendChild(delButton);
-                span.appendChild(updateButton);
+                li.className = "product-card";
+
+                li.innerHTML = `
+                    <div class="product-head">
+                        <div>
+                            <div class="product-name">${p.name}</div>
+                            <div class="small-text">
+                                Product Id: ${p.id} |
+                                Category: ${p.category} |
+                                Expiry Date: ${p.expiry_date} |
+                                Date Added: ${p.added_date}
+                            </div>
+                        </div>
+
+                        <div>
+                            ${openNow
+                                ? '<span class="opened-tag">🔓 Opened</span>'
+                                : '<span class="closed-tag">🔒 Closed</span>'}
+                        </div>
+                    </div>
+
+                    <div class="btns">
+                        <button class="grey-btn" onclick='openOverlay(${JSON.stringify(p)})'>Update</button>
+                        <button class="red-btn" onclick='deleteProduct("${p.id}")'>Delete</button>
+                        <button class="green-btn" onclick='toggleOpened("${p.id}", "${p.name}")'>
+                            ${openNow ? "Mark Closed" : "Mark Opened"}
+                        </button>
+                    </div>
+                `;
+
                 list.appendChild(li);
             });
 
-        } catch (err) {
-            console.error("Error loading products:", err);
+        }catch(err){
+            console.log("error loading products", err);
         }
     }
 
-    // Add product
-    async function addProduct() {
-        const product = {
-            category: document.getElementById("category").value,
-            name: document.getElementById("name").value,
-            expiry_date: document.getElementById("expiry_date").value
-        };
+    // ekleme
+    async function addProduct(){
+        const category = document.getElementById("category").value.trim();
+        const name = document.getElementById("name").value.trim();
+        const expiry_date = document.getElementById("expiry_date").value.trim();
+        const msg = document.getElementById("smallMessage");
+
+        if(!category || !name || !expiry_date){
+            msg.textContent = "Please fill all fields";
+            msg.style.color = "red";
+            return;
+        }
+
+        const check = validateDate(expiry_date);
+
+        if(!check.valid){
+            msg.textContent = check.message;
+            msg.style.color = "red";
+            return;
+        }
 
         await fetch(`${BASE_URL}/add_product`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(product)
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                category: category,
+                name: name,
+                expiry_date: expiry_date
+            })
         });
+
+        msg.textContent = "Product added";
+        msg.style.color = "green";
+
+        document.getElementById("category").value = "";
+        document.getElementById("name").value = "";
+        document.getElementById("expiry_date").value = "";
 
         loadProducts();
     }
 
-    // Delete product
-    async function deleteProduct(id) {
+    // silme
+    async function deleteProduct(id){
         await fetch(`${BASE_URL}/delete_product`, {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ id: id })
+            method:"DELETE",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({id:id})
         });
+
+        const openedData = getOpenedStuff();
+        delete openedData[id];
+        saveOpenedStuff(openedData);
 
         loadProducts();
     }
 
-    // Update Overlay
-    function openOverlay(product) {
-        currentProductId = product.id;
+    // update modal ac
+    function openOverlay(product){
+        currentId = product.id;
 
         document.getElementById("editName").value = product.name;
         document.getElementById("editCategory").value = product.category;
@@ -108,36 +379,33 @@
         document.getElementById("overlay").style.display = "block";
     }
 
-    // Close Overlay
-    function closeOverlay() {
+    function closeOverlay(){
         document.getElementById("overlay").style.display = "none";
     }
 
-    // Update product
-    async function updateProduct(id) {
+    // update route icin
+    async function updateProduct(){
         const name = document.getElementById("editName").value.trim();
         const category = document.getElementById("editCategory").value.trim();
         const expiry_date = document.getElementById("editExpiry").value.trim();
 
-        if (!name || !category || !expiry_date) {
-            alert("All fields are required.");
-            closeOverlay();
+        if(!name || !category || !expiry_date){
+            alert("All fields are required");
             return;
         }
 
-        const result = validateDate(expiry_date);
+        const check = validateDate(expiry_date);
 
-        if (!result.valid) {
-            alert(result.message);
-            closeOverlay();
+        if(!check.valid){
+            alert(check.message);
             return;
         }
 
         await fetch(`${BASE_URL}/update_product`, {
-            method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                id: currentProductId,
+            method:"PUT",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                id: currentId,
                 name: name,
                 category: category,
                 expiry_date: expiry_date
@@ -148,32 +416,55 @@
         loadProducts();
     }
 
-    // Validate date, just if it is in DD/MM/YYYY format and if it is a real date
-    function validateDate(dateStr) {
-        if (!dateStr) {
-            return { valid: false, message: "Date is required" };
+    // opened / closed degistirme
+    function toggleOpened(id, name){
+        const openedData = getOpenedStuff();
+
+        if(openedData[id] === true){
+            openedData[id] = false;
+            showMsg(name + " marked as closed");
+        }else{
+            openedData[id] = true;
+            showMsg(name + " has been opened");
+        }
+
+        saveOpenedStuff(openedData);
+        loadProducts();
+    }
+
+    // tarih format kontrolu
+    function validateDate(dateStr){
+        if(!dateStr){
+            return {valid:false, message:"Date is required"};
         }
 
         const pattern = /^\d{2}\/\d{2}\/\d{4}$/;
-        if (!pattern.test(dateStr)) {
-            return { valid: false, message: "Format must be DD/MM/YYYY" };
+
+        if(!pattern.test(dateStr)){
+            return {valid:false, message:"Format must be DD/MM/YYYY"};
         }
 
-        const [day, month, year] = dateStr.split("/").map(Number);
+        const parts = dateStr.split("/");
+        const day = Number(parts[0]);
+        const month = Number(parts[1]);
+        const year = Number(parts[2]);
+
         const date = new Date(year, month - 1, day);
 
-        if (
+        if(
             date.getFullYear() !== year ||
             date.getMonth() !== month - 1 ||
             date.getDate() !== day
-        ) {
-            return { valid: false, message: "Invalid date" };
+        ){
+            return {valid:false, message:"Invalid date"};
         }
 
-        return { valid: true };
+        return {valid:true};
     }
 
-    window.onload = loadProducts;
+    window.onload = function(){
+        loadProducts();
+    };
 </script>
 
 </body>
