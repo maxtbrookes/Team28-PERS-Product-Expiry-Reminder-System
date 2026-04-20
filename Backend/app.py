@@ -17,14 +17,14 @@ def add_product():
 
     #Generates new ID 
     product = read_file()
-    new_id = str(len(products)+ 1)
+    new_id = str(len(product)+ 1)
 
     #Adds product to the CSV
     with open("products.csv", "a", newline="") as f:
         csv.writer(f).writerow([new_id, category, name, expiry_date, ""])
 
 
-    return jsonify({"Success": "Product added Successfully"}), 201
+    return jsonify({"Success": "Product added successfully"}), 201
 
 #Read Products Route
 @app.route("/read_products")
