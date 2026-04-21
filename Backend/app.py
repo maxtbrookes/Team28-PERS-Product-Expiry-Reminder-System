@@ -9,7 +9,22 @@ CORS(app)
 #Add Product Route
 @app.route("/add_product", methods=["POST"])
 def add_product():
-    return
+    data = request.get_json()
+
+    name = data.get("name")
+    category = data.get("category")
+    expiry_date = data.get("expiry_date")
+
+    #Generates new ID 
+    product = read_file()
+    new_id = str(len(product)+ 1)
+
+    #Adds product to the CSV
+    with open("products.csv", "a", newline="") as f:
+        csv.writer(f).writerow([new_id, category, name, expiry_date, ""])
+
+
+    return jsonify({"Success": "Product added successfully"}), 201
 
 #Read Products Route
 @app.route("/read_products")
