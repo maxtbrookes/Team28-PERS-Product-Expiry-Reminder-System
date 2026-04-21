@@ -27,8 +27,7 @@ async function loadProducts(){
                             Product Id: ${entry.id} |
                             Category: ${entry.category} |
                             Expiry Date: ${entry.expiry_date} |
-                            Date Added: ${entry.added_date} |
-                            opened: ${entry.opened}
+                            Date Added: ${entry.added_date}
                         </div>
                     </div>
 

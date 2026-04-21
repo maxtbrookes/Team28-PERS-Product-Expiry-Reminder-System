@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from datetime import datetime
 import os, csv
 
 
@@ -19,9 +20,15 @@ def add_product():
     product = read_file()
     new_id = str(len(product)+ 1)
 
+    #Default the open state to 0.
+    open_state = 0;
+
+    #Need a date added
+    timeNow = datetime.now().strftime('%d/%m/%Y')
+
     #Adds product to the CSV
     with open("products.csv", "a", newline="") as f:
-        csv.writer(f).writerow([new_id, category, name, expiry_date, ""])
+        csv.writer(f).writerow([new_id, category, name, expiry_date, timeNow, open_state, ""])
 
 
     return jsonify({"Success": "Product added successfully"}), 201

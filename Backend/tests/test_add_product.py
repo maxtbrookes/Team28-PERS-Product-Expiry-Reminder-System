@@ -5,8 +5,8 @@ CSV_FILE = "products.csv"
 
 def reset_csv():
     data = [                                         
-        ["1", "poultry", "chicken", "17/04/2026", "15/04/2026"],
-        ["2", "poultry", "liver", "17/04/2026", "15/04/2026"]
+        ["1", "poultry", "chicken", "17/04/2026", "15/04/2026, 0"],
+        ["2", "poultry", "liver", "17/04/2026", "15/04/2026, 1"]
     ]
     with open(CSV_FILE, "w", newline="") as f:
         csv.writer(f).writerows(data)
