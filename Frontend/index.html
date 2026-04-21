@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="global.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,80 +68,10 @@
             color:white;
         }
 
-        .grey-btn{
-            background:#e5e7eb;
-            color:#222;
-        }
-
-        .red-btn{
-            background:#c0392b;
-            color:white;
-        }
-
-        .green-btn{
-            background:#1f8b4c;
-            color:white;
-        }
-
         #productList{
             list-style:none;
             padding:0;
             margin:0;
-        }
-
-        .product-card{
-            background:#fafafa;
-            border:1px solid #ddd;
-            border-radius:10px;
-            padding:14px;
-            margin-bottom:12px;
-        }
-
-        .product-head{
-            display:flex;
-            justify-content:space-between;
-            align-items:flex-start;
-            gap:10px;
-            flex-wrap:wrap;
-        }
-
-        .product-name{
-            font-size:18px;
-            font-weight:bold;
-            color:#163d6b;
-        }
-
-        .small-text{
-            color:#555;
-            font-size:14px;
-            margin-top:5px;
-        }
-
-        .opened-tag{
-            background:#e7f7ec;
-            color:#1f8b4c;
-            border:1px solid #b7dec1;
-            padding:5px 9px;
-            border-radius:20px;
-            font-size:12px;
-            font-weight:bold;
-        }
-
-        .closed-tag{
-            background:#eef1f4;
-            color:#555;
-            border:1px solid #d7dde2;
-            padding:5px 9px;
-            border-radius:20px;
-            font-size:12px;
-            font-weight:bold;
-        }
-
-        .btns{
-            margin-top:12px;
-            display:flex;
-            gap:8px;
-            flex-wrap:wrap;
         }
 
         #noteBox{
@@ -233,83 +165,13 @@
 
 <script>
     let currentId = null;
-    const BASE_URL = "http://127.0.0.1:5000";
-
-    // bunu local storage da tutuyorum cunku backendde opened yok su an
-    function getOpenedStuff(){
-        const data = localStorage.getItem("openedStuff");
-        if(data){
-            return JSON.parse(data);
-        }
-        return {};
-    }
-
-    function saveOpenedStuff(data){
-        localStorage.setItem("openedStuff", JSON.stringify(data));
-    }
+    //const BASE_URL = "http://127.0.0.1:5000";
 
     // ustte bir yerde mesaj gibi gozuksun diye
     function showMsg(text){
         const box = document.getElementById("noteBox");
         box.style.display = "block";
         box.textContent = text;
-    }
-
-    // urunleri backendden cekip listeye koyuyorum
-    async function loadProducts(){
-        try{
-            const res = await fetch(`${BASE_URL}/read_products`);
-            const data = await res.json();
-
-            const list = document.getElementById("productList");
-            list.innerHTML = "";
-
-            const openedData = getOpenedStuff();
-
-            data.forEach(function(p){
-                let openNow = false;
-
-                if(openedData[p.id] === true){
-                    openNow = true;
-                }
-
-                const li = document.createElement("li");
-                li.className = "product-card";
-
-                li.innerHTML = `
-                    <div class="product-head">
-                        <div>
-                            <div class="product-name">${p.name}</div>
-                            <div class="small-text">
-                                Product Id: ${p.id} |
-                                Category: ${p.category} |
-                                Expiry Date: ${p.expiry_date} |
-                                Date Added: ${p.added_date}
-                            </div>
-                        </div>
-
-                        <div>
-                            ${openNow
-                                ? '<span class="opened-tag">🔓 Opened</span>'
-                                : '<span class="closed-tag">🔒 Closed</span>'}
-                        </div>
-                    </div>
-
-                    <div class="btns">
-                        <button class="grey-btn" onclick='openOverlay(${JSON.stringify(p)})'>Update</button>
-                        <button class="red-btn" onclick='deleteProduct("${p.id}")'>Delete</button>
-                        <button class="green-btn" onclick='toggleOpened("${p.id}", "${p.name}")'>
-                            ${openNow ? "Mark Closed" : "Mark Opened"}
-                        </button>
-                    </div>
-                `;
-
-                list.appendChild(li);
-            });
-
-        }catch(err){
-            console.log("error loading products", err);
-        }
     }
 
     // ekleme

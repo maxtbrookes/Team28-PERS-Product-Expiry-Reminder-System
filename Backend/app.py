@@ -61,7 +61,8 @@ def read_file():
                 "category": row[1],
                 "name": row[2],
                 "expiry_date": row[3],
-                "added_date": row[4]
+                "added_date": row[4],
+                "opened": row[5]
             }
             products.append(product)
 
