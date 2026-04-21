@@ -40,13 +40,15 @@ def read_products():
     return jsonify(products)
 
 #Delete Product Route
+# This route deletes a product based on its ID
 @app.route("/delete_product", methods=["DELETE"])
 def delete_product():
     products = read_file()
 
     data = request.get_json()
+#  Convert ID to string
     id = data.get('id')
-
+#Loops through all products to find matching id
     for product in products:
         if id == product["id"]:
             if delete_item(id):
