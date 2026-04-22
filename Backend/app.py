@@ -21,7 +21,7 @@ def add_product():
     new_id = str(len(product)+ 1)
 
     #Default the open state to 0.
-    open_state = 0;
+    open_state = 0
 
     #Need a date added
     timeNow = datetime.now().strftime('%d/%m/%Y')

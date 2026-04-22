@@ -7,16 +7,15 @@ CSV_FILE = "products.csv"
 # CSV setup
 def reset_csv():
     data = [
-        ["1", "poultry", "chicken", "17/04/2026", "15/04/2026"],
-        ["2", "poultry", "liver", "17/04/2026", "15/04/2026"]
+        ["1", "poultry", "chicken", "17/04/2026", "15/04/2026", "0"],
+        ["2", "poultry", "liver", "17/04/2026", "15/04/2026", "1"]
     ]
 
     with open(CSV_FILE, "w", newline="") as f:
         csv.writer(f).writerows(data)
 
 
-# Helper function test
-
+# Helper function tests
 def test_update_items_success():
     reset_csv()
 
@@ -38,8 +37,7 @@ def test_update_items_not_found():
     assert result is False
 
 
-# Route test
-
+# Route tests
 def test_update_product_route_success():
     reset_csv()
     client = app.test_client()
