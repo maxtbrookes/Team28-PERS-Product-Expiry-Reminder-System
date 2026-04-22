@@ -132,7 +132,8 @@ def update_items(id, name, category, expiry_date):
                     p["category"],
                     p["name"],
                     p["expiry_date"],
-                    p["added_date"]
+                    p["added_date"],
+                    p["opened"], # keep opened field when updating CSV to avoid data loss
                 ])
     return updated
 

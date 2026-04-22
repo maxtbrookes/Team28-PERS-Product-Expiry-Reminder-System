@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="global.js"></script>
-<link rel="stylesheet" type="text/css" href="style.css">
 <head>
+<!- comments translated to English and small UI improvements added
+- lock icons added for opened/closed state->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PERS Product Manager</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <style>
         body{
             font-family: Arial, sans-serif;
@@ -164,23 +165,20 @@
 </div>
 
 <script>
-    let currentId = null;
-    //const BASE_URL = "http://127.0.0.1:5000";
+    let currentId = null; //for knowing which product now editing we are
 
-    // ustte bir yerde mesaj gibi gozuksun diye
     function showMsg(text){
         const box = document.getElementById("noteBox");
         box.style.display = "block";
         box.textContent = text;
     }
 
-    // ekleme
     async function addProduct(){
         const category = document.getElementById("category").value.trim();
         const name = document.getElementById("name").value.trim();
         const expiry_date = document.getElementById("expiry_date").value.trim();
         const msg = document.getElementById("smallMessage");
-
+        // IF one of them empty is STOP it there
         if(!category || !name || !expiry_date){
             msg.textContent = "Please fill all fields";
             msg.style.color = "red";
@@ -195,45 +193,55 @@
             return;
         }
 
-        await fetch(`${BASE_URL}/add_product`, {
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({
-                category: category,
-                name: name,
-                expiry_date: expiry_date
-            })
-        });
+        try{
+            await fetch(`${BASE_URL}/add_product`, {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    category: category,
+                    name: name,
+                    expiry_date: expiry_date
+                })
+            });
 
-        msg.textContent = "Product added";
-        msg.style.color = "green";
+            msg.textContent = "Product added";
+            msg.style.color = "green";
+            //after add , form is reset for next use
+            document.getElementById("category").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("expiry_date").value = "";
 
-        document.getElementById("category").value = "";
-        document.getElementById("name").value = "";
-        document.getElementById("expiry_date").value = "";
-
-        loadProducts();
+            await loadProducts();
+        }catch(err){
+            console.log("add error", err);
+            msg.textContent = "Could not add product";
+            msg.style.color = "red";
+        }
     }
 
-    // silme
     async function deleteProduct(id){
-        await fetch(`${BASE_URL}/delete_product`, {
-            method:"DELETE",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({id:id})
-        });
+        try{
+            await fetch(`${BASE_URL}/delete_product`, {
+                method:"DELETE",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({id:id})
+            });
+            // remove from opened state also if exists there
+            if(typeof openedState !== "undefined"){
+                delete openedState[id];
+            }
 
-        const openedData = getOpenedStuff();
-        delete openedData[id];
-        saveOpenedStuff(openedData);
-
-        loadProducts();
+            showMsg("Product deleted");
+            await loadProducts();
+        }catch(err){
+            console.log("delete error", err);
+            showMsg("Delete failed");
+        }
     }
 
-    // update modal ac
     function openOverlay(product){
         currentId = product.id;
-
+        // old values inside putting so user can edit
         document.getElementById("editName").value = product.name;
         document.getElementById("editCategory").value = product.category;
         document.getElementById("editExpiry").value = product.expiry_date;
@@ -242,15 +250,15 @@
     }
 
     function closeOverlay(){
+        // Hide the edit modal after update or cancel action
         document.getElementById("overlay").style.display = "none";
     }
 
-    // update route icin
     async function updateProduct(){
         const name = document.getElementById("editName").value.trim();
         const category = document.getElementById("editCategory").value.trim();
         const expiry_date = document.getElementById("editExpiry").value.trim();
-
+        // Prevent empty values from being submitted
         if(!name || !category || !expiry_date){
             alert("All fields are required");
             return;
@@ -263,39 +271,28 @@
             return;
         }
 
-        await fetch(`${BASE_URL}/update_product`, {
-            method:"PUT",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({
-                id: currentId,
-                name: name,
-                category: category,
-                expiry_date: expiry_date
-            })
-        });
+        try{   // Send updated product data to the backend
+            await fetch(`${BASE_URL}/update_product`, {
+                method:"PUT",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    id: currentId,
+                    name: name,
+                    category: category,
+                    expiry_date: expiry_date
+                })
+            });
 
-        closeOverlay();
-        loadProducts();
-    }
-
-    // opened / closed degistirme
-    function toggleOpened(id, name){
-        const openedData = getOpenedStuff();
-
-        if(openedData[id] === true){
-            openedData[id] = false;
-            showMsg(name + " marked as closed");
-        }else{
-            openedData[id] = true;
-            showMsg(name + " has been opened");
+            closeOverlay();
+            showMsg("Product updated");
+            await loadProducts();
+        }catch(err){
+            console.log("update error", err);
+            alert("Update failed");
         }
-
-        saveOpenedStuff(openedData);
-        loadProducts();
     }
 
-    // tarih format kontrolu
-    function validateDate(dateStr){
+    function validateDate(dateStr){ // Date input must not be empty
         if(!dateStr){
             return {valid:false, message:"Date is required"};
         }
@@ -313,7 +310,7 @@
 
         const date = new Date(year, month - 1, day);
 
-        if(
+        if( // it makes sure the constructed date is a real calendar date
             date.getFullYear() !== year ||
             date.getMonth() !== month - 1 ||
             date.getDate() !== day
@@ -329,5 +326,6 @@
     };
 </script>
 
+<script src="global.js"></script>
 </body>
 </html>
