@@ -76,9 +76,11 @@ def update_product():
 def read_file():
     products = []
 
+    #open the csv file
     with open("products.csv", "r") as f:
         reader = csv.reader(f)
 
+        #Go through each column and assign it to a dict.
         for row in reader:
             product = {
                 "id": row[0],
@@ -88,8 +90,9 @@ def read_file():
                 "added_date": row[4],
                 "opened": row[5]
             }
+            #Add the entry to the main dict
             products.append(product)
-
+    #Return the entries.
     return products
 
 #Delete an item from the CSV

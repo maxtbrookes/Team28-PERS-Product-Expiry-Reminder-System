@@ -13,3 +13,8 @@ This requires pip and python3 to be installed, if you don't have them follow thi
 Python3: https://www.geeksforgeeks.org/python/download-and-install-python-3-latest-version/
 
 Pip: Already installed with python3
+
+
+For testing:
+pip install pytest
+python -m pytest -v
