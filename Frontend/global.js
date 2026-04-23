@@ -63,6 +63,7 @@ async function loadProducts(){
 
             list.appendChild(li);
         });
+    renderRecipes(data);
 
     }catch(err){
         console.log("error loading products", err);
